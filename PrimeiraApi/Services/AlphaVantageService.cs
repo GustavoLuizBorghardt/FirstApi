@@ -1,7 +1,7 @@
 ﻿using AlphaVantage.API.Models;
 using System.Globalization;
 
-namespace AlphaVantage.API.Services
+namespace PrimeiraApi.Services
 {
     public class AlphaVantageService
     {

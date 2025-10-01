@@ -1,4 +1,4 @@
-﻿[API de Consulta de Ações]
+﻿Área de Trabalho[API de Consulta de Ações]
 Uma API em .NET 8 que consome dados do mercado de ações direto da Alpha Vantage.
 Com ela você consegue ver as ações que mais subiram ou caíram no dia, buscar cotações em tempo real e até analisar o histórico de um ativo.
 
