@@ -1,28 +1,43 @@
-﻿Área de Trabalho[API de Consulta de Ações]
-Uma API em .NET 8 que consome dados do mercado de ações direto da Alpha Vantage.
-Com ela você consegue ver as ações que mais subiram ou caíram no dia, buscar cotações em tempo real e até analisar o histórico de um ativo.
+﻿API de Consulta de Ações
+📖 Descrição
+Uma API feita em .NET 8 que serve como um hub de informações do mercado de ações. Ela consome dados em tempo real da Alpha Vantage e também permite que usuários cadastrem suas ações favoritas, salvando tudo em um banco de dados PostgreSQL.
 
-Projeto feito com uma arquitetura limpa (Controllers, Services, Models) pra ficar fácil de manter, evoluir e testar.
+O objetivo é ter um serviço completo onde você pode não só consultar dados públicos, como também gerenciar informações personalizadas de usuários.
 
-[Tecnologias]
-.NET 8 + ASP.NET Core → construção da API
-Swagger (OpenAPI) → documentação interativa
-OData → filtros avançados nos endpoints
-Entity Framework + PostgreSQL → planejados para utilização futura
+O projeto foi construído seguindo uma arquitetura limpa e organizada (Controllers, Services, Models, DTOs) para ser fácil de manter e evoluir.
 
-[Como rodar]
-Pré-requisitos:
-SDK do .NET 8 instalado
-Uma chave gratuita da Alpha Vantage (https://www.alphavantage.co/) > https://prnt.sc/CPln9o24eGqC
-Git pra clonar o repositório
-(Opcional) Postman ou outra ferramenta de teste
+🚀 Tecnologias Utilizadas
+.NET 8 e ASP.NET Core → Para a construção da API.
 
-[Passo a passo]
-Clone o repositório pelo CMD:
-git clone https://github.com/GustavoLuizBorghardt/FirstApi.git
+Entity Framework Core → Para fazer a ponte entre o código C# e o banco de dados.
 
-Abra o projeto no Visual Studio
-Configure sua chave no appsettings.json:
+PostgreSQL → Nosso banco de dados para salvar usuários e suas ações favoritas.
+
+Swagger (OpenAPI) → Para a documentação interativa dos endpoints.
+
+OData → Para permitir filtros mais avançados em algumas consultas.
+
+⚙️ Configuração e Instalação
+Para rodar este projeto na sua máquina, siga os passos abaixo.
+
+Pré-requisitos
+SDK do .NET 8 instalado.
+
+PostgreSQL instalado na sua máquina.
+
+Uma chave de API gratuita da Alpha Vantage (pegue a sua aqui).
+
+Git para clonar o repositório.
+
+Passo a passo
+Primeiro, clone o repositório para a sua máquina usando o terminal de sua preferência (CMD, PowerShell, etc.):
+
+git clone [https://github.com/GustavoLuizBorghardt/FirstApi.git](https://github.com/GustavoLuizBorghardt/FirstApi.git)
+
+Navegue até a pasta do projeto e abra a solução (.sln) no Visual Studio.
+
+Configure suas chaves e senhas no arquivo appsettings.json. Ele precisa ter a sua chave da Alpha Vantage e a sua senha do PostgreSQL.
+
 {
   "AlphaVantage": {
     "ApiKey": "SUA_CHAVE_AQUI"
@@ -32,41 +47,105 @@ Configure sua chave no appsettings.json:
   }
 }
 
-[Rode o projeto]
+Muito Importante: Crie o banco de dados. Com o projeto aberto no Visual Studio, abra o Package Manager Console (Tools > NuGet Package Manager > Package Manager Console) e rode o seguinte comando para criar as tabelas:
+
+Update-Database
+
+Agora é só rodar o projeto! Você pode fazer isso apertando F5 no Visual Studio (usando o perfil https) ou pelo terminal com o comando:
+
 dotnet run
-Ou pelo Visual Studio (perfil https).
 
-[Endpoints]
-Todos os endpoints podem ser testados direto no Swagger:
-https://localhost:[PORTA]/swagger
+Endpoints da API
+Você pode testar todos os endpoints usando duas ferramentas principais:
 
-Ou via Postman (URL base: https://localhost:[porta]).
+Swagger: É a forma mais fácil. A documentação interativa abrirá automaticamente no seu navegador ao rodar o projeto. Basta encontrar o endpoint, clicar em "Try it out" e preencher os campos.
 
-1. Cotação em Tempo Real
-Preço mais recente de uma ação.
-GET /api/stocks/quote/{symbol}
-Exemplo:
-https://localhost:[porta]/api/stocks/quote/MSFT
+URL: https://localhost:[PORTA]/swagger
 
-2. Maiores Altas do Dia
-GET /api/stocks/top-gainers
-Exemplo:
-https://localhost:[porta]/api/Stocks/top-gainers
+Postman: Uma ferramenta mais completa, ideal para salvar e organizar suas requisições.
 
-3. Maiores Baixas do Dia
-GET /api/stocks/top-losers
-Exemplo:
-https://localhost:[porta]/api/Stocks/top-losers
-Com filter: https://localhost:[porta]/api/Stocks/top-losers?$orderby=Price asc
+URL Base: https://localhost:[PORTA] (você completa o resto do endereço para cada endpoint).
 
-4. Sequência de Altas
-Maior sequência de dias que uma ação fechou em alta.
-GET /api/stocks/growth-streak/{symbol}
-Exemplo:
-https://localhost:[porta]/api/Stocks/growth-streak/MSFT
+Endpoints de Ações (Dados Públicos)
+Cotação em Tempo Real
+Busca o preço mais recente de uma ação específica.
 
-5. Histórico Diário
-Fechamento dos últimos 100 dias
-GET /api/stocks/history/{symbol}
-Exemplo:
-https://localhost:[porta]/api/stocks/history/MSFT
+Método: GET
+
+URL: /api/stocks/quote/{symbol}
+
+Exemplo (Postman/Navegador): https://localhost:7100/api/stocks/quote/AAPL
+
+Maiores Altas do Dia
+Retorna a lista de ações que mais valorizaram.
+
+Método: GET
+
+URL: /api/stocks/top-gainers
+
+Maiores Baixas do Dia
+Retorna a lista de ações que mais desvalorizaram.
+
+Método: GET
+
+URL: /api/stocks/top-losers
+
+Histórico Diário
+Retorna os dados de fechamento dos últimos 100 dias de uma ação.
+
+Método: GET
+
+URL: /api/stocks/history/{symbol}
+
+Exemplo (Postman/Navegador): https://localhost:7100/api/stocks/history/TSLA
+
+Endpoints de Usuários (Dados Salvos no Banco)
+Criar Novo Usuário
+Cadastra um novo usuário no sistema.
+
+Método: POST
+
+URL: /api/users
+
+Como testar (Postman):
+
+Defina o método como POST.
+
+Na aba Body, selecione raw e JSON.
+
+Insira o corpo da requisição:
+
+{
+  "username": "Seu Nome",
+  "email": "seu@email.com"
+}
+
+Adicionar Ação Favorita
+Adiciona uma ação à lista de favoritos de um usuário.
+
+Método: POST
+
+URL: /api/users/{userId}/favorites
+
+Exemplo de URL (Postman): /api/users/1/favorites
+
+Como testar (Postman):
+
+Defina o método como POST.
+
+Na aba Body, selecione raw e JSON.
+
+Insira o corpo da requisição:
+
+{
+  "ticker": "PETR4.SA"
+}
+
+Listar Cotações dos Favoritos
+Busca a cotação em tempo real de todas as ações favoritas de um usuário.
+
+Método: GET
+
+URL: /api/users/{userId}/favorites
+
+Exemplo de URL (Postman/Navegador): https://localhost:7100/api/users/1/favorites

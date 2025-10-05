@@ -6,8 +6,6 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
-        // Este método constrói a configuração de uma forma mais completa,
-        // garantindo que o appsettings.json seja encontrado e lido.
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -17,7 +15,6 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
 
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        // Adicionamos uma verificação para dar um erro mais claro se algo der errado
         if (string.IsNullOrEmpty(connectionString))
         {
             throw new InvalidOperationException("A ConnectionString 'DefaultConnection' não foi encontrada ou está vazia no appsettings.json.");
