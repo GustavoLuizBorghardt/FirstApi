@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PrimeiraApi.Data;
 using PrimeiraApi.Data.Entities;
 using PrimeiraApi.DTOs;
-using PrimeiraApi.Services; // Adicionar o using para o serviço da AlphaVantage
+using PrimeiraApi.Services; 
 
 namespace PrimeiraApi.Controllers
 {
@@ -12,16 +12,14 @@ namespace PrimeiraApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly AlphaVantageService _alphaVantageService; // Adicionar o serviço
+        private readonly AlphaVantageService _alphaVantageService; 
 
-        // Agora injetamos os dois serviços que o controller precisa
         public UsersController(ApplicationDbContext context, AlphaVantageService alphaVantageService)
         {
             _context = context;
             _alphaVantageService = alphaVantageService;
         }
 
-        // ENDPOINT 1: Criar um novo usuário (sem alterações)
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User newUser)
         {
@@ -44,7 +42,6 @@ namespace PrimeiraApi.Controllers
             return CreatedAtAction(nameof(CreateUser), new { id = userResponse.Id }, userResponse);
         }
 
-        // ENDPOINT 2: Adicionar uma ação favorita (com melhoria anti-duplicados)
         [HttpPost("{userId}/favorites")]
         public async Task<IActionResult> AddFavoriteStock(int userId, [FromBody] AddFavoriteStockDto favoriteStockDto)
         {
@@ -54,7 +51,6 @@ namespace PrimeiraApi.Controllers
                 return NotFound("Usuário não encontrado.");
             }
 
-            // BÔNUS: Verificação para não adicionar favoritos duplicados
             var ticker = favoriteStockDto.Ticker.ToUpper();
             var alreadyFavorite = await _context.FavoriteStocks
                 .AnyAsync(fs => fs.UserId == userId && fs.Ticker == ticker);
@@ -88,9 +84,8 @@ namespace PrimeiraApi.Controllers
         [HttpGet("{userId}/favorites")]
         public async Task<IActionResult> GetFavoriteStocksWithQuotes(int userId)
         {
-            // 1. Encontra o usuário e carrega sua lista de ações favoritas junto
             var user = await _context.Users
-                .Include(u => u.FavoriteStocks) // "Include" carrega os dados da tabela relacionada
+                .Include(u => u.FavoriteStocks) 
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -103,17 +98,12 @@ namespace PrimeiraApi.Controllers
                 return Ok(new List<FavoriteStockQuoteDto>()); // Retorna uma lista vazia se não houver favoritos
             }
 
-            // 2. Para cada ação favorita, cria uma "tarefa" para buscar sua cotação.
-            //    Isso permite que todas as chamadas para a Alpha Vantage rodem em paralelo,
-            //    o que é muito mais rápido!
             var quoteTasks = user.FavoriteStocks
                 .Select(fav => _alphaVantageService.GetRealTimeQuoteAsync(fav.Ticker))
                 .ToList();
 
-            // 3. Espera todas as tarefas terminarem
             var quotes = await Task.WhenAll(quoteTasks);
 
-            // 4. Monta a lista de resposta final, juntando os dados
             var response = quotes
                 .Where(q => q != null) // Ignora se alguma cotação falhou
                 .Select(q => new FavoriteStockQuoteDto

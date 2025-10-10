@@ -1,18 +1,41 @@
-﻿using AlphaVantage.API.Models;
+﻿using PrimeiraApi.Models;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
 
 namespace PrimeiraApi.Services
 {
     public class AlphaVantageService
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _apiKey;
 
-        public AlphaVantageService(HttpClient httpClient, IConfiguration configuration)
+        public AlphaVantageService(HttpClient httpClient, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClient;
             _apiKey = configuration["AlphaVantage:ApiKey"]
                       ?? throw new InvalidOperationException("API Key da Alpha Vantage não encontrada na configuração.");
+            _httpClientFactory = httpClientFactory;
+        }
+
+        public async Task<StockQuote?> TranslateAndGetQuoteAsync(string companyName)
+        {
+            var translationClient = _httpClientFactory.CreateClient("TranslationApiClient");
+            try
+            {
+                var response = await translationClient.GetFromJsonAsync<TranslationResponse>($"/translate/{companyName}");
+                if (response?.Ticker == null)
+                {
+                    return null;
+                }
+                return await GetRealTimeQuoteAsync(response.Ticker);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao comunicar com a TranslationApi: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<StockQuote?> GetRealTimeQuoteAsync(string symbol)
@@ -91,5 +114,11 @@ namespace PrimeiraApi.Services
 
             return (symbol, longestStreak);
         }
+    }
+
+    public class TranslationResponse
+    {
+        public string? CompanyName { get; set; }
+        public string? Ticker { get; set; }
     }
 }

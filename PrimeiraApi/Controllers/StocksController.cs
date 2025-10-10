@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using PrimeiraApi.Models;
 using PrimeiraApi.Services;
 
-namespace AlphaVantage.API.Controllers
+namespace PrimeiraApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -15,8 +16,23 @@ namespace AlphaVantage.API.Controllers
             _alphaVantageService = alphaVantageService;
         }
 
-        // ENDPOINT 1 Retorna a cotação mais recente de uma ação
-        [HttpGet("quote/{symbol}"), EnableQuery]
+        // --- NOVO ENDPOINT QUE FAZ A COMUNICAÇÃO ---
+        [HttpGet("quote-by-name/{companyName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetQuoteByCompanyName(string companyName)
+        {
+            var quote = await _alphaVantageService.TranslateAndGetQuoteAsync(companyName);
+            if (quote == null)
+            {
+                return NotFound($"Não foi possível encontrar a cotação para a empresa '{companyName}'. Verifique o nome ou se a tradução existe.");
+            }
+            return Ok(quote);
+        }
+
+        // --- ENDPOINTS ANTIGOS ---
+
+        [HttpGet("quote/{symbol}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRealTimeQuote(string symbol)
@@ -29,7 +45,6 @@ namespace AlphaVantage.API.Controllers
             return Ok(quote);
         }
 
-        // ENDPOINT 2 Ação que mais valorizou
         [HttpGet("top-gainers"), EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,7 +58,6 @@ namespace AlphaVantage.API.Controllers
             return Ok(movers.TopGainers);
         }
 
-        // ENDPOINT 3: Ação que menos valorizou
         [HttpGet("top-losers"), EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -57,8 +71,7 @@ namespace AlphaVantage.API.Controllers
             return Ok(movers.TopLosers);
         }
 
-        // ENDPOINT 4 Ação com maior sequência de altas
-        [HttpGet("growth-streak/{symbol}"), EnableQuery]
+        [HttpGet("growth-streak/{symbol}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetLongestGrowthStreak(string symbol)
         {
@@ -66,8 +79,8 @@ namespace AlphaVantage.API.Controllers
             return Ok(new { Symbol = result.Symbol, LongestStreakInDays = result.Streak });
         }
 
-        // ENDPOINT 5 Consulta livre com OData
-        [HttpGet("history/{symbol}"), EnableQuery]
+        [HttpGet("history/{symbol}")]
+        [EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDailyHistory(string symbol)

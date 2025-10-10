@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14 d17.14
+VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeiraApi", "PrimeiraApi\PrimeiraApi.csproj", "{3844A628-E929-4617-A33C-4C4C98521D46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeiraApi.Tests", "PrimeiraApi.Tests\PrimeiraApi.Tests.csproj", "{34C64021-A573-443A-BA10-925C7FA1597E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslationApi", "TranslationApi\TranslationApi.csproj", "{DA3DC580-E694-4E59-A79F-99802549F279}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{3844A628-E929-4617-A33C-4C4C98521D46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3844A628-E929-4617-A33C-4C4C98521D46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3844A628-E929-4617-A33C-4C4C98521D46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34C64021-A573-443A-BA10-925C7FA1597E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34C64021-A573-443A-BA10-925C7FA1597E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34C64021-A573-443A-BA10-925C7FA1597E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34C64021-A573-443A-BA10-925C7FA1597E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA3DC580-E694-4E59-A79F-99802549F279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA3DC580-E694-4E59-A79F-99802549F279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA3DC580-E694-4E59-A79F-99802549F279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA3DC580-E694-4E59-A79F-99802549F279}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

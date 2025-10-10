@@ -15,6 +15,16 @@ builder.Services.AddControllers().AddOData(opt => opt.Select().Filter().OrderBy(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// --- A CONFIGURAÇÃO QUE FALTAVA ESTÁ AQUI ---
+// Configura um HttpClient nomeado para se comunicar com a TranslationApi
+builder.Services.AddHttpClient("TranslationApiClient", client =>
+{
+    // CORREÇÃO: Apontando para a porta correta da TranslationApi
+    client.BaseAddress = new Uri("https://localhost:7200");
+});
+// ---------------------------------------------
+
+// Este registra o HttpClient padrão para o AlphaVantageService
 builder.Services.AddHttpClient<AlphaVantageService>();
 
 var app = builder.Build();

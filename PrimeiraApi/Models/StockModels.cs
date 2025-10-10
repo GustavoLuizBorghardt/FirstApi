@@ -1,7 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AlphaVantage.API.Models
+namespace PrimeiraApi.Models // <-- GARANTIR QUE ESTÁ CORRETO
 {
+    // Modelo para o endpoint TOP_GAINERS_LOSERS
     public class TopMoversResponse
     {
         [JsonPropertyName("top_gainers")]
@@ -23,6 +24,7 @@ namespace AlphaVantage.API.Models
         public string ChangePercentage { get; set; } = string.Empty;
     }
 
+    // Modelo para o endpoint TIME_SERIES_DAILY
     public class DailyInfoResponse
     {
         [JsonPropertyName("Meta Data")]
@@ -43,11 +45,15 @@ namespace AlphaVantage.API.Models
         [JsonPropertyName("4. close")]
         public string Close { get; set; } = string.Empty;
     }
+
+    // Modelo para a resposta completa do endpoint GLOBAL_QUOTE
     public class GlobalQuoteResponse
-    {
+    { 
         [JsonPropertyName("Global Quote")]
         public StockQuote? GlobalQuote { get; set; }
     }
+
+    // Modelo para os detalhes da cotação de uma ação
     public class StockQuote
     {
         [JsonPropertyName("01. symbol")]
@@ -63,3 +69,4 @@ namespace AlphaVantage.API.Models
         public string ChangePercent { get; set; } = string.Empty;
     }
 }
+
