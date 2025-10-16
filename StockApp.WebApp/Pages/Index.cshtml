@@ -1,0 +1,49 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Consulta de Cotações</h1>
+    <p>Digite o nome de uma empresa para obter a cotação em tempo real.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form method="get">
+            <div class="input-group mb-3">
+                <input type="text" name="CompanyName" class="form-control" placeholder="Ex: apple, microsoft, petrobras" value="@Model.CompanyName" />
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        @if (Model.Quote != null)
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3>Resultado para @Model.Quote.Symbol</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Preço:</strong> @Model.Quote.Price</li>
+                    <li class="list-group-item"><strong>Variação:</strong> @Model.Quote.ChangePercent</li>
+                    <li class="list-group-item"><strong>Último Cotação:</strong> @Model.Quote.LatestTradingDay</li>
+                </ul>
+            </div>
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.CompanyName))
+        {
+            <div class="alert alert-danger mt-4" role="alert">
+                <h4 class="alert-heading">Erro na Busca!</h4>
+                <p>Não foi possível encontrar a cotação para "@Model.CompanyName". Verifique o nome e tente novamente.</p>
+
+                @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                {
+                    <hr>
+                    <p class="mb-0"><strong>Detalhe técnico:</strong> @Model.ErrorMessage</p>
+                }
+            </div>
+        }
+    </div>
+</div>
+

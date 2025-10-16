@@ -1,151 +1,236 @@
-﻿API de Consulta de Ações
-📖 Descrição
-Uma API feita em .NET 8 que serve como um hub de informações do mercado de ações. Ela consome dados em tempo real da Alpha Vantage e também permite que usuários cadastrem suas ações favoritas, salvando tudo em um banco de dados PostgreSQL.
+﻿API de Consulta de Ações (com Front-End Web)
 
-O objetivo é ter um serviço completo onde você pode não só consultar dados públicos, como também gerenciar informações personalizadas de usuários.
 
-O projeto foi construído seguindo uma arquitetura limpa e organizada (Controllers, Services, Models, DTOs) para ser fácil de manter e evoluir.
+
+📖 Sobre o Projeto
+
+
+
+Este projeto é uma solução completa em .NET 8 para consulta de dados do mercado de ações. O que começou como uma simples API evoluiu para um sistema com múltiplos serviços e uma interface visual para o usuário.
+
+
+
+A aplicação consome dados em tempo real da Alpha Vantage e permite que o usuário não só consulte cotações, mas também salve suas ações favoritas.
+
+
+
+A arquitetura foi pensada para ser modular e demonstrar um ambiente similar ao de microsserviços, com diferentes projetos cuidando de diferentes responsabilidades.
+
+
+
+🏗️ Arquitetura da Solução
+
+
+
+A solução é composta por 4 projetos:
+
+
+
+PrimeiraApi (Back-end Principal): O coração do sistema. Uma API robusta que busca dados da Alpha Vantage, gerencia usuários e ações favoritas salvas no banco de dados.
+
+
+
+TranslationApi (Microsserviço): Uma Minimal API pequena e focada, responsável por "traduzir" nomes de empresas para seus tickers correspondentes.
+
+
+
+StockApp.WebApp (Front-end): A camada visual do projeto. Uma aplicação web feita com Razor Pages que permite ao usuário final interagir com o sistema de forma amigável, sem precisar do Swagger ou Postman.
+
+
+
+PrimeiraApi.Tests (Testes): Projeto de testes unitários (MSTest) para garantir a qualidade e a corretude da lógica de negócio.
+
+
 
 🚀 Tecnologias Utilizadas
-.NET 8 e ASP.NET Core → Para a construção da API.
 
-Entity Framework Core → Para fazer a ponte entre o código C# e o banco de dados.
 
-PostgreSQL → Nosso banco de dados para salvar usuários e suas ações favoritas.
 
-Swagger (OpenAPI) → Para a documentação interativa dos endpoints.
+.NET 8 e ASP.NET Core para a construção de todos os serviços.
 
-OData → Para permitir filtros mais avançados em algumas consultas.
 
-⚙️ Configuração e Instalação
-Para rodar este projeto na sua máquina, siga os passos abaixo.
 
-Pré-requisitos
+Entity Framework Core como ORM para comunicação com o banco.
+
+
+
+PostgreSQL como banco de dados relacional.
+
+
+
+Razor Pages para a construção da interface visual (front-end).
+
+
+
+Minimal API para a criação do microsserviço de tradução.
+
+
+
+MSTest e Moq para os testes unitários.
+
+
+
+Swagger (OpenAPI) para a documentação interativa das APIs.
+
+
+
+⚙️ Configuração e Instalação (Como Rodar)
+
+
+
+Para rodar a solução completa na sua máquina, siga os passos abaixo.
+
+
+
+Pré-requisitos:
+
+
+
 SDK do .NET 8 instalado.
 
-PostgreSQL instalado na sua máquina.
 
-Uma chave de API gratuita da Alpha Vantage (pegue a sua aqui).
+
+PostgreSQL instalado e rodando na sua máquina.
+
+
+
+Uma chave gratuita da Alpha Vantage (pegue a sua aqui).
+
+
 
 Git para clonar o repositório.
 
-Passo a passo
-Primeiro, clone o repositório para a sua máquina usando o terminal de sua preferência (CMD, PowerShell, etc.):
 
-git clone [https://github.com/GustavoLuizBorghardt/FirstApi.git](https://github.com/GustavoLuizBorghardt/FirstApi.git)
 
-Navegue até a pasta do projeto e abra a solução (.sln) no Visual Studio.
+Passo a Passo:
 
-Configure suas chaves e senhas no arquivo appsettings.json. Ele precisa ter a sua chave da Alpha Vantage e a sua senha do PostgreSQL.
+
+
+Clone o repositório para a sua máquina usando seu terminal de preferência (CMD, PowerShell, etc.):
+
+
+
+git clone \[https://github.com/GustavoLuizBorghardt/FirstApi.git](https://github.com/GustavoLuizBorghardt/FirstApi.git)
+
+
+
+
+
+Abra o arquivo da solução (.sln) no Visual Studio.
+
+
+
+Configure o appsettings.json do projeto PrimeiraApi:
+
+Preencha sua chave da Alpha Vantage e os dados do seu banco de dados PostgreSQL.
+
+
 
 {
-  "AlphaVantage": {
-    "ApiKey": "SUA_CHAVE_AQUI"
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=MyStockDb;Username=postgres;Password=SUA_SENHA_DO_POSTGRES"
-  }
+
+&nbsp; "AlphaVantage": {
+
+&nbsp;   "ApiKey": "SUA\_CHAVE\_AQUI"
+
+&nbsp; },
+
+&nbsp; "ConnectionStrings": {
+
+&nbsp;   "DefaultConnection": "Host=localhost;Database=MyStockDb;Username=postgres;Password=SUA\_SENHA\_DO\_POSTGRES"
+
+&nbsp; }
+
 }
 
-Muito Importante: Crie o banco de dados. Com o projeto aberto no Visual Studio, abra o Package Manager Console (Tools > NuGet Package Manager > Package Manager Console) e rode o seguinte comando para criar as tabelas:
+
+
+
+
+Crie o Banco de Dados (Migrations):
+
+No Visual Studio, abra o Package Manager Console (Tools > NuGet Package Manager > ...).
+
+Certifique-se de que o "Default project" está selecionado para PrimeiraApi e rode o comando:
+
+
 
 Update-Database
 
-Agora é só rodar o projeto! Você pode fazer isso apertando F5 no Visual Studio (usando o perfil https) ou pelo terminal com o comando:
 
-dotnet run
 
-Endpoints da API
-Você pode testar todos os endpoints usando duas ferramentas principais:
 
-Swagger: É a forma mais fácil. A documentação interativa abrirá automaticamente no seu navegador ao rodar o projeto. Basta encontrar o endpoint, clicar em "Try it out" e preencher os campos.
 
-URL: https://localhost:[PORTA]/swagger
+Configure a Inicialização Múltipla:
 
-Postman: Uma ferramenta mais completa, ideal para salvar e organizar suas requisições.
+Para que o front-end e as APIs rodem juntos, precisamos configurar o Visual Studio:
 
-URL Base: https://localhost:[PORTA] (você completa o resto do endereço para cada endpoint).
 
-Endpoints de Ações (Dados Públicos)
-Cotação em Tempo Real
-Busca o preço mais recente de uma ação específica.
 
-Método: GET
+Clique com o botão direito na Solução (Solution 'PrimeiraApi') e vá em Properties.
 
-URL: /api/stocks/quote/{symbol}
 
-Exemplo (Postman/Navegador): https://localhost:7100/api/stocks/quote/AAPL
 
-Maiores Altas do Dia
-Retorna a lista de ações que mais valorizaram.
+Selecione "Multiple startup projects".
 
-Método: GET
 
-URL: /api/stocks/top-gainers
 
-Maiores Baixas do Dia
-Retorna a lista de ações que mais desvalorizaram.
+Defina a Action como "Start" para os seguintes projetos:
 
-Método: GET
 
-URL: /api/stocks/top-losers
 
-Histórico Diário
-Retorna os dados de fechamento dos últimos 100 dias de uma ação.
+PrimeiraApi
 
-Método: GET
 
-URL: /api/stocks/history/{symbol}
 
-Exemplo (Postman/Navegador): https://localhost:7100/api/stocks/history/TSLA
+TranslationApi
 
-Endpoints de Usuários (Dados Salvos no Banco)
-Criar Novo Usuário
-Cadastra um novo usuário no sistema.
 
-Método: POST
 
-URL: /api/users
+StockApp.WebApp
 
-Como testar (Postman):
 
-Defina o método como POST.
 
-Na aba Body, selecione raw e JSON.
+Clique em Apply e OK.
 
-Insira o corpo da requisição:
 
-{
-  "username": "Seu Nome",
-  "email": "seu@email.com"
-}
 
-Adicionar Ação Favorita
-Adiciona uma ação à lista de favoritos de um usuário.
+Rode o Projeto:
 
-Método: POST
+Pressione F5 no Visual Studio. Os 3 projetos vão iniciar, e o seu navegador abrirá a página do StockApp.WebApp.
 
-URL: /api/users/{userId}/favorites
 
-Exemplo de URL (Postman): /api/users/1/favorites
 
-Como testar (Postman):
+💻 Como Usar a Aplicação
 
-Defina o método como POST.
 
-Na aba Body, selecione raw e JSON.
 
-Insira o corpo da requisição:
+Você pode interagir com o sistema de duas formas:
 
-{
-  "ticker": "PETR4.SA"
-}
 
-Listar Cotações dos Favoritos
-Busca a cotação em tempo real de todas as ações favoritas de um usuário.
 
-Método: GET
+Pela Aplicação Web (Recomendado):
 
-URL: /api/users/{userId}/favorites
+Acesse o site que abriu no seu navegador (ex: https://localhost:7231). Use o campo de busca para consultar cotações por nome de empresa.
 
-Exemplo de URL (Postman/Navegador): https://localhost:7100/api/users/1/favorites
+
+
+Pelas APIs (Swagger):
+
+Durante a execução, as páginas do Swagger para as duas APIs também estarão disponíveis em suas respectivas portas (ex: https://localhost:7100/swagger). Você pode usá-las para testar os endpoints diretamente.
+
+
+
+🧪 Como Rodar os Testes
+
+
+
+Para validar a lógica de negócio, você pode executar os testes unitários:
+
+
+
+No Visual Studio, abra o Test Explorer (Test > Test Explorer).
+
+
+
+Clique no botão "Run All Tests in View" para executar todos os testes e ver os resultados.
+

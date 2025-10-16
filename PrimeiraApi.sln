@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeiraApi.Tests", "Primei
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslationApi", "TranslationApi\TranslationApi.csproj", "{DA3DC580-E694-4E59-A79F-99802549F279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApp.WebApp", "StockApp.WebApp\StockApp.WebApp.csproj", "{CA69A4B8-D704-4C39-B597-E801CD499B53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DA3DC580-E694-4E59-A79F-99802549F279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA3DC580-E694-4E59-A79F-99802549F279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA3DC580-E694-4E59-A79F-99802549F279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA69A4B8-D704-4C39-B597-E801CD499B53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA69A4B8-D704-4C39-B597-E801CD499B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA69A4B8-D704-4C39-B597-E801CD499B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA69A4B8-D704-4C39-B597-E801CD499B53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
