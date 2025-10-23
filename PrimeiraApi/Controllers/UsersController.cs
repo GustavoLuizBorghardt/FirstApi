@@ -79,8 +79,6 @@ namespace PrimeiraApi.Controllers
             return Ok(favoriteResponse);
         }
 
-        // NOVO ENDPOINT 3: Listar ações favoritas com cotações
-        // Rota: GET /api/users/{userId}/favorites
         [HttpGet("{userId}/favorites")]
         public async Task<IActionResult> GetFavoriteStocksWithQuotes(int userId)
         {
@@ -95,7 +93,7 @@ namespace PrimeiraApi.Controllers
 
             if (!user.FavoriteStocks.Any())
             {
-                return Ok(new List<FavoriteStockQuoteDto>()); // Retorna uma lista vazia se não houver favoritos
+                return Ok(new List<FavoriteStockQuoteDto>());
             }
 
             var quoteTasks = user.FavoriteStocks
@@ -105,7 +103,7 @@ namespace PrimeiraApi.Controllers
             var quotes = await Task.WhenAll(quoteTasks);
 
             var response = quotes
-                .Where(q => q != null) // Ignora se alguma cotação falhou
+                .Where(q => q != null)
                 .Select(q => new FavoriteStockQuoteDto
                 {
                     Ticker = q!.Symbol,

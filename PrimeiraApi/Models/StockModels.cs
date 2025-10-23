@@ -1,8 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace PrimeiraApi.Models // <-- GARANTIR QUE ESTÁ CORRETO
+namespace PrimeiraApi.Models 
 {
-    // Modelo para o endpoint TOP_GAINERS_LOSERS
     public class TopMoversResponse
     {
         [JsonPropertyName("top_gainers")]
@@ -24,7 +23,6 @@ namespace PrimeiraApi.Models // <-- GARANTIR QUE ESTÁ CORRETO
         public string ChangePercentage { get; set; } = string.Empty;
     }
 
-    // Modelo para o endpoint TIME_SERIES_DAILY
     public class DailyInfoResponse
     {
         [JsonPropertyName("Meta Data")]
@@ -46,14 +44,12 @@ namespace PrimeiraApi.Models // <-- GARANTIR QUE ESTÁ CORRETO
         public string Close { get; set; } = string.Empty;
     }
 
-    // Modelo para a resposta completa do endpoint GLOBAL_QUOTE
     public class GlobalQuoteResponse
     { 
         [JsonPropertyName("Global Quote")]
         public StockQuote? GlobalQuote { get; set; }
     }
 
-    // Modelo para os detalhes da cotação de uma ação
     public class StockQuote
     {
         [JsonPropertyName("01. symbol")]

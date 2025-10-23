@@ -16,7 +16,6 @@ namespace PrimeiraApi.Controllers
             _alphaVantageService = alphaVantageService;
         }
 
-        // --- NOVO ENDPOINT QUE FAZ A COMUNICAÇÃO ---
         [HttpGet("quote-by-name/{companyName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -29,8 +28,6 @@ namespace PrimeiraApi.Controllers
             }
             return Ok(quote);
         }
-
-        // --- ENDPOINTS ANTIGOS ---
 
         [HttpGet("quote/{symbol}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

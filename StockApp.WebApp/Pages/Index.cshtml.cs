@@ -40,10 +40,6 @@ namespace StockApp.WebApp.Pages
             }
         }
     }
-
-    // --- A CORREÇÃO FINAL ESTÁ AQUI ---
-    // Esta classe agora é uma cópia exata do modelo da nossa API principal,
-    // incluindo os atributos JsonPropertyName com os nomes originais da Alpha Vantage.
     public class StockQuote
     {
         [JsonPropertyName("01. symbol")]
